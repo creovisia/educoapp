@@ -31,15 +31,17 @@ body {
 
 .header-right {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
 .header-right input {
-  border: none;
-  border-radius: 20px;
-  padding: 6px 10px;
+  border: 70px;
+  width: 200px;
+  border-radius: 40px;
+  padding: 6px 6px;
   outline: none;
+  
 }
 
 /* CATEGORIES */
