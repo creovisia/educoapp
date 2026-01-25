@@ -13,7 +13,7 @@ body {
 .app-screen {
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(180deg, #4f46e5, #4338ca);
+  background: linear-gradient(#fff);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -29,7 +29,7 @@ body {
 }
 
 .logo-area img {
-  width: 160px;
+  width: 190px;
   animation: zoomFade 1.8s ease-in-out infinite;
 }
 
@@ -39,7 +39,7 @@ body {
 }
 
 .brand img {
-  width: 100px;
+  width: 200px;
   opacity: 0.85;
 }
 
