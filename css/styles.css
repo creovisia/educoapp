@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  font-family: system-ui;
+  background: #f4f6fa;
+}
+
+header {
+  background: #5b6df8;
+  color: white;
+  padding: 16px;
+  text-align: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 360px;
+}
+
+input, button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  background: #5b6df8;
+  color: white;
+  font-weight: bold;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+
+.subject {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.chapter {
+  background: white;
+  margin: 10px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+}
