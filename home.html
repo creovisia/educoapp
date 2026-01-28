@@ -1,25 +1,240 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <
- <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <title>Educo - Smart Learning</title>
+    <link rel="manifest" href="/manifest.json">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text-main); line-height: 1.5; }
+
+        /* Navigation & Layout */
+        header { 
+            position: sticky; top: 0; background: var(--card); z-index: 100;
+            padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .container { padding: 20px; max-width: 600px; margin: 0 auto; }
+        .hidden { display: none !important; }
+
+        /* UI Components */
+        .card { background: var(--card); border-radius: 20px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
+        .btn { padding: 14px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%; font-size: 16px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:active { background: var(--primary-dark); transform: scale(0.98); }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+
+        /* Form Inputs */
+        input, select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--primary); }
+
+        /* Notification Badge */
+        .notif-wrapper { position: relative; }
+        .badge { position: absolute; top: -2px; right: -2px; background: var(--danger); color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; }
+
+        /* Content Items */
+        .item-row { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .pdf-box { width: 45px; height: 45px; background: #fee2e2; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--danger); }
+
+        /* PDF Viewer */
+        #pdf-viewer { position: fixed; inset: 0; background: white; z-index: 1000; display: none; flex-direction: column; }
+        #pdf-viewer iframe { flex-grow: 1; border: none; }
+    </style>
 </head>
-
 <body>
-  <header class="topbar">
-  <span class="menu" onclick="openMenu()">☰</span>
-  <h1>Educo</h1>
-  <button class="bell-btn" onclick="location.href='notifications.html'">
-    🔔 <span id="badge" class="badge hidden">0</span>
-  </button>
-</header>
 
-<script type="module" src="js/badge.js"></script>
-<script type="module" src="js/fcm.js"></script>
+    <audio id="notif-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"></audio>
+
+    <div id="auth-screen" class="container" style="height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="font-size: 32px; color: var(--primary);">Educo</h1>
+            <p style="color: var(--text-muted);">Master your curriculum anywhere</p>
+        </div>
+        <div class="card">
+            <input type="email" id="email" placeholder="Email Address">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn btn-primary" onclick="app.login()">Sign In</button>
+        </div>
+    </div>
+
+    <div id="app-shell" class="hidden">
+        <header>
+            <div id="user-branding" style="display: flex; align-items: center; gap: 10px;">
+                <img id="header-avatar" src="" style="width: 32px; height: 32px; border-radius: 8px;">
+                <strong id="app-title">Educo</strong>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <div class="notif-wrapper" onclick="app.navigate('notif-page')">
+                    <span class="material-icons-round">notifications</span>
+                    <div id="notif-count" class="badge hidden">0</div>
+                </div>
+                <span class="material-icons-round" onclick="app.navigate('profile-page')">account_circle</span>
+            </div>
+        </header>
+
+        <main class="container">
+            <section id="home-page" class="page">
+                <h2 style="margin-bottom: 20px;">Your Resources</h2>
+                <div id="content-list"></div>
+            </section>
+
+            <section id="profile-page" class="page hidden">
+                <div class="card" style="text-align: center;">
+                    <h3 id="profile-name">---</h3>
+                    <p id="profile-school" style="color: var(--text-muted); font-size: 14px;"></p>
+                </div>
+                <div class="card">
+                    <p><strong>Board:</strong> <span id="profile-board"></span></p>
+                    <p><strong>Class:</strong> <span id="profile-class"></span></p>
+                </div>
+                <button class="btn btn-outline" onclick="app.logout()">Log Out</button>
+            </section>
+
+            <section id="admin-page" class="page hidden">
+                <h2 style="color: var(--danger);">Admin Dashboard</h2>
+                <div class="card">
+                    <h4>Push New Resource</h4>
+                    <input id="adm-title" placeholder="Resource Title (e.g. Algebra Ch.1)">
+                    <input id="adm-view" placeholder="Google Drive View Link">
+                    <input id="adm-down" placeholder="Direct Download Link">
+                    <button class="btn btn-primary" onclick="app.adminAdd()">Publish Content</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="pdf-viewer">
+        <div style="padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee;">
+            <span class="material-icons-round" onclick="app.closePDF()">close</span>
+            <span id="pdf-title-display" style="font-weight: 600;">Document</span>
+            <a id="pdf-download-btn" href="#" target="_blank" style="text-decoration: none; color: var(--primary);"><span class="material-icons-round">download</span></a>
+        </div>
+        <iframe id="pdf-frame" src=""></iframe>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, getDocs, collection, query, where, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
+        const firebaseConfig = { /* PASTE YOUR CONFIG HERE */ };
+        const app_fb = initializeApp(firebaseConfig);
+        const auth = getAuth(app_fb);
+        const db = getFirestore(app_fb);
+        const messaging = getMessaging(app_fb);
+
+        window.app = {
+            user: null,
+
+            async login() {
+                const e = document.getElementById('email').value;
+                const p = document.getElementById('password').value;
+                try { await signInWithEmailAndPassword(auth, e, p); } catch(err) { alert(err.message); }
+            },
+
+            logout() { signOut(auth).then(() => location.reload()); },
+
+            navigate(pageId) {
+                document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+                document.getElementById(pageId).classList.remove('hidden');
+            },
+
+            async loadContent() {
+                const q = query(collection(db, "content"), 
+                    where("school", "==", this.user.school), 
+                    where("class", "==", this.user.class)
+                );
+                const snap = await getDocs(q);
+                const container = document.getElementById('content-list');
+                container.innerHTML = '';
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    container.innerHTML += `
+                        <div class="card item-row" onclick="app.openPDF('${data.title}', '${data.viewUrl}', '${data.downloadUrl}')">
+                            <div class="pdf-box"><span class="material-icons-round">description</span></div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-weight: 600;">${data.title}</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">PDF Document</div>
+                            </div>
+                            <span class="material-icons-round" style="color: #cbd5e1;">chevron_right</span>
+                        </div>`;
+                });
+            },
+
+            openPDF(title, view, download) {
+                document.getElementById('pdf-title-display').innerText = title;
+                document.getElementById('pdf-frame').src = view.replace('/view', '/preview');
+                document.getElementById('pdf-download-btn').href = download;
+                document.getElementById('pdf-viewer').style.display = 'flex';
+            },
+
+            closePDF() { document.getElementById('pdf-viewer').style.display = 'none'; },
+
+            async adminAdd() {
+                const title = document.getElementById('adm-title').value;
+                if(!title) return;
+                await addDoc(collection(db, "content"), {
+                    title,
+                    class: this.user.class,
+                    school: this.user.school,
+                    viewUrl: document.getElementById('adm-view').value,
+                    downloadUrl: document.getElementById('adm-down').value,
+                    createdAt: serverTimestamp()
+                });
+                alert('Published!');
+                this.loadContent();
+            }
+        };
+
+        onAuthStateChanged(auth, async (u) => {
+            if (u) {
+                const d = await getDoc(doc(db, "users", u.uid));
+                if (d.exists()) {
+                    app.user = d.data();
+                    document.getElementById('auth-screen').classList.add('hidden');
+                    document.getElementById('app-shell').classList.remove('hidden');
+                    
+                    // Populate Profile
+                    document.getElementById('profile-name').innerText = app.user.name;
+                    document.getElementById('profile-school').innerText = app.user.school;
+                    document.getElementById('profile-board').innerText = app.user.board;
+                    document.getElementById('profile-class').innerText = app.user.class;
+                    document.getElementById('header-avatar').src = `https://ui-avatars.com/api/?name=${app.user.name}&background=6366f1&color=fff`;
+                    
+                    if(u.email === 'admin@educo.app') document.getElementById('admin-page').classList.remove('hidden');
+                    
+                    app.loadContent();
+                    
+                    // Register for Push
+                    getToken(messaging, { vapidKey: 'YOUR_VAPID_KEY' }).then(token => {
+                        // Update token in Firestore...
+                    });
+                }
+            }
+        });
+
+        // PWA Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js');
+        }
+    </script>
 </body>
-
 </html>
