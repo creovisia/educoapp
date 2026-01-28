@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Educo – Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/home.css" />
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <h1>Home</h1>
+    <div class="header-right">
+      
+      <input type="text" id="searchInput" placeholder="Search">
+      <span class="icon">🔔</span>
+    </div>
+  </header>
+
+  <!-- CATEGORY MENU -->
+  <div class="categories" id="categories">
+    <button class="active" data-subject="By School">By School</button>
+    <button data-subject="English">English</button>
+    <button data-subject="Language">Language</button>
+    <button data-subject="Physics">Physics</button>
+    <button data-subject="Chemistry">Chemistry</button>
+    <button data-subject="Mathematics">Mathematics</button>
+    <button data-subject="Biology">Biology</button>
+  </div>
+
+  <!-- FEED -->
+  <div class="feed" id="feed"></div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-item active">🏠<span>Home</span></div>
+    <div class="nav-item">📢<span>Updates</span></div>
+    <div class="nav-item">💬<span>Chat</span></div>
+    <div class="nav-item">👤<span>Profile</span></div>
+  </nav>
+</div>
+
+<script src="firebase.js"></script>
+<script src="home.js"></script>
+</body>
+</html>
