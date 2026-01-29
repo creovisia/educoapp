@@ -1,12 +1,14 @@
 // Firebase Configuration
 // Replace with your Firebase project credentials
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDcXgGY5zwFCuDByvpgt6GzF5B2M9uZdFc",
+  authDomain: "educoapp.firebaseapp.com",
+  databaseURL: "https://educoapp-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "educoapp",
+  storageBucket: "educoapp.firebasestorage.app",
+  messagingSenderId: "727036537455",
+  appId: "1:727036537455:web:5bf727d17ed8f5bf153b9a",
+  measurementId: "G-2KYGR2XWP6"
 };
 
 // Initialize Firebase
