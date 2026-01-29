@@ -1,0 +1,23 @@
+{
+  "name": "educo",
+  "version": "1.0.0",
+  "description": "Mobile-First Education Web App powered by Firebase",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve",
+    "deploy": "firebase deploy",
+    "test": "echo &quot;Error: no test specified&quot; && exit 1"
+  },
+  "keywords": [
+    "education",
+    "mobile-first",
+    "firebase",
+    "learning",
+    "e-learning"
+  ],
+  "author": "Educo Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4CAF50">
+  <meta name="description" content="Educo - Mobile-First Education App">
+  <title>Educo - Education App</title>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+  <!-- Login Page -->
+  <div id="login-page" class="login-page">
+    <div class="login-container">
+      <div class="login-logo">
+        <h1>📚 Educo</h1>
+        <p>Your Mobile Learning Companion</p>
+      </div>
+      
+      <div id="login-error" class="login-error hidden"></div>
+      
+      <form class="login-form" onsubmit="event.preventDefault(); login();">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email</label>
+          <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-full">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div id="app-container" class="app-container hidden">
+    <!-- Top Bar -->
+    <header id="top-bar" class="top-bar">
+      <div class="top-bar-left">
+        <button id="menu-btn" class="menu-btn" aria-label="Open menu">
+          ☰
+        </button>
+        <span class="app-logo">Educo</span>
+      </div>
+      <div class="top-bar-right">
+        <button id="notification-btn" class="notification-btn" aria-label="Notifications">
+          🔔
+          <span id="notification-badge" class="notification-badge hidden">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+      <!-- Content will be dynamically loaded here -->
+    </main>
+
+    <!-- Side Menu Overlay -->
+    <div id="side-menu-overlay" class="side-menu-overlay"></div>
+
+    <!-- Side Menu -->
+    <nav id="side-menu" class="side-menu">
+      <div class="side-menu-header">
+        <button id="side-menu-close" class="side-menu-close" aria-label="Close menu">
+          ✕
+        </button>
+        <span>Menu</span>
+      </div>
+
+      <div class="side-menu-user">
+        <div id="side-menu-user-info" class="side-menu-user-info">
+          <h3>Loading...</h3>
+          <p>Please wait</p>
+        </div>
+      </div>
+
+      <div class="side-menu-nav">
+        <button class="side-menu-item" data-view="home">
+          <span class="side-menu-item-icon">🏠</span>
+          <span>Home</span>
+        </button>
+        <button class="side-menu-item" data-view="profile">
+          <span class="side-menu-item-icon">👤</span>
+          <span>Profile</span>
+        </button>
+        <button class="side-menu-item" data-view="notifications">
+          <span class="side-menu-item-icon">🔔</span>
+          <span>Notifications</span>
+        </button>
+        <button class="side-menu-item" id="admin-tab" data-view="admin" style="display: none;">
+          <span class="side-menu-item-icon">⚙️</span>
+          <span>Admin Panel</span>
+        </button>
+      </div>
+
+      <div class="side-menu-footer">
+        <button id="logout-btn" class="side-menu-item">
+          <span class="side-menu-item-icon">🚪</span>
+          <span>Logout</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Firebase Config -->
+  <script src="firebase-config.js"></script>
+  
+  <!-- App Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
